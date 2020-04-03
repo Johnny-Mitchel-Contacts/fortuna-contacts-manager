@@ -1,12 +1,51 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
+
+
 public class ContactsTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         Scanner input = new Scanner(System.in);
         int option;
 
-        System.out.println("\nJAVA MOVIE DATABASE:\n");
+        System.out.println("\nContacts List:\n");
+
+        String contactsPathName = "contactsList";
+        String contactsFileName = "contactsList.txt";
+
+
+        Path contactsPath = Paths.get(contactsPathName);
+        if (!Files.exists(contactsPath)) {
+            Files.createDirectory(contactsPath);
+        }
+        System.out.println(Files.exists(contactsPath));
+
+        // Create a file
+        Path contactsFilePath = Paths.get(contactsPathName, contactsFileName);
+        String line = "test";
+        Files.write(contactsFilePath, Arrays.asList(line));
+
+        // Break groceries into its own file
+        Path groceriesPath = Paths.get(contactsPathName, contactsFileName);
+        List<String> groceries = Arrays.asList("eggs", "toilet paper", "sanitizer");
+        Files.write(groceriesPath, groceries);
+
+        // Append to contacts
+        line = "tissues";
+        Files.write(groceriesPath, Arrays.asList(line), StandardOpenOption.APPEND);
+
+//        // read the list
+//        List<String> readList = Files.readAllLines(contactsPath);
+//        System.out.println(readList);
+
+
 
         do {
             System.out.println("*----------------------------------------------------*");
