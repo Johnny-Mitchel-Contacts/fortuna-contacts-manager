@@ -1,6 +1,5 @@
-test
-joe 1234567
-randy 1111111
-sani 2222222
-mark 7654321
-mitchel
+Name | Number
+Joe | 123-4567
+Randy | 111-1111
+Sandy | 222-2222
+Mark | 765-4321

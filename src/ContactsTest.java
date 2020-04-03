@@ -30,16 +30,16 @@ public class ContactsTest {
 
         // Create a file
         Path contactsFilePath = Paths.get(contactsPathName, contactsFileName);
-        String line = "test";
+        String line = "Name | Number";
         Files.write(contactsFilePath, Arrays.asList(line));
 
         // Break groceries into its own file
         Path groceriesPath = Paths.get(contactsPathName, contactsFileName);
-        List<String> groceries = Arrays.asList("joe 1234567", "randy 1111111", "sani 2222222");
+        List<String> groceries = Arrays.asList("Joe | 123-4567", "Randy | 111-1111", "Sandy | 222-2222");
         Files.write(groceriesPath, groceries, StandardOpenOption.APPEND);
 
         // Append to contacts
-        line = "mark 7654321";
+        line = "Mark | 765-4321";
         Files.write(groceriesPath, Arrays.asList(line), StandardOpenOption.APPEND);
 
 //        // read the list
@@ -76,7 +76,18 @@ public class ContactsTest {
                     System.out.println("\nCase 2\n*----------------------------------------------------*");
                     System.out.println("Enter the name of your contact: ");
                     String newName = input.getString();
-                    Files.write(groceriesPath, Arrays.asList(newName), StandardOpenOption.APPEND);
+                    System.out.println("Enter " + newName + "'s phone number: ");
+                    String newNumber = input.getString();
+                    String newContact = newName + " | " + newNumber;
+
+                    Files.write(groceriesPath, Arrays.asList(newContact), StandardOpenOption.APPEND);
+
+                    System.out.println("\nHere are the updated contacts\n");
+                    ReadContacts.displayContacts();
+                    System.out.println("Go back to main menu? [y/n]");
+                    if (!input.yesNo()) {
+                        option = 0;
+                    }
 
                     break;
                 case 3:
