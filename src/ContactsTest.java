@@ -6,26 +6,27 @@ import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import util.Input;
 
 
 
 public class ContactsTest {
     public static void main(String[] args) throws IOException {
 
-        Scanner input = new Scanner(System.in);
+        Input input = new Input();
         int option;
 
         System.out.println("\nContacts List:\n");
 
-        String contactsPathName = "contactsList";
-        String contactsFileName = "contactsList.txt";
+        String contactsPathName = "contacts";
+        String contactsFileName = "contacts.txt";
 
 
         Path contactsPath = Paths.get(contactsPathName);
         if (!Files.exists(contactsPath)) {
             Files.createDirectory(contactsPath);
         }
-        System.out.println(Files.exists(contactsPath));
+
 
         // Create a file
         Path contactsFilePath = Paths.get(contactsPathName, contactsFileName);
@@ -35,7 +36,7 @@ public class ContactsTest {
         // Break groceries into its own file
         Path groceriesPath = Paths.get(contactsPathName, contactsFileName);
         List<String> groceries = Arrays.asList("eggs", "toilet paper", "sanitizer");
-        Files.write(groceriesPath, groceries);
+        Files.write(groceriesPath, groceries, StandardOpenOption.APPEND);
 
         // Append to contacts
         line = "tissues";
@@ -59,12 +60,18 @@ public class ContactsTest {
             System.out.printf("\n|\t%-44s %4s|"," 5 - Exit.","");
             System.out.printf("\n|%-26s %25s|","","");
             System.out.println("\n*----------------------------------------------------*\n");
-            option = input.nextInt();
+            option = input.getInt();
 
 
             switch (option) {
                 case 1:
-                    System.out.println("Case 1");
+                    ReadContacts.displayContacts();
+
+                    System.out.println("Go back to main menu? [y/n]");
+                    if (!input.yesNo()) {
+                        option = 0;
+                    }
+
                     break;
                 case 2:
                     System.out.println("\nCase 2\n*----------------------------------------------------*");
@@ -78,12 +85,14 @@ public class ContactsTest {
                     break;
                 case 5:
                     System.out.println("\nCase 5\n*----------------------------------------------------*");
-                    option = 0;
                     break;
             }
 
             System.out.println();
         } while (option != 0);
+
+        System.out.println("Have a good day!");
+
     }
 
 }
