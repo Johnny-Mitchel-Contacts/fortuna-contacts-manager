@@ -35,11 +35,11 @@ public class ContactsTest {
 
         // Break groceries into its own file
         Path groceriesPath = Paths.get(contactsPathName, contactsFileName);
-        List<String> groceries = Arrays.asList("eggs", "toilet paper", "sanitizer");
+        List<String> groceries = Arrays.asList("joe 1234567", "randy 1111111", "sani 2222222");
         Files.write(groceriesPath, groceries, StandardOpenOption.APPEND);
 
         // Append to contacts
-        line = "tissues";
+        line = "mark 7654321";
         Files.write(groceriesPath, Arrays.asList(line), StandardOpenOption.APPEND);
 
 //        // read the list
@@ -66,7 +66,6 @@ public class ContactsTest {
             switch (option) {
                 case 1:
                     ReadContacts.displayContacts();
-
                     System.out.println("Go back to main menu? [y/n]");
                     if (!input.yesNo()) {
                         option = 0;
@@ -75,6 +74,9 @@ public class ContactsTest {
                     break;
                 case 2:
                     System.out.println("\nCase 2\n*----------------------------------------------------*");
+                    System.out.println("Enter the name of your contact: ");
+                    String newName = input.getString();
+                    Files.write(groceriesPath, Arrays.asList(newName), StandardOpenOption.APPEND);
 
                     break;
                 case 3:
@@ -84,7 +86,7 @@ public class ContactsTest {
                     System.out.println("\nCase 4\n*----------------------------------------------------*");
                     break;
                 case 5:
-                    System.out.println("\nCase 5\n*----------------------------------------------------*");
+                    option = 0;
                     break;
             }
 
