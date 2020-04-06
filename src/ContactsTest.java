@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -96,6 +99,31 @@ public class ContactsTest {
                     break;
                 case 3:
                     System.out.println("\nCase 3:\n*----------------------------------------------------*");
+                    System.out.println("Enter name you would like to search for: ");
+                    File f1 = new File("contacts/contacts.txt");  //Creation of File Descriptor for input file
+                    String[] words = null;  //Intialize the word Array
+                    FileReader fr = new FileReader(f1);  //Creation of File Reader object
+                    BufferedReader br = new BufferedReader(fr); //Creation of BufferedReader object
+                    String s;
+                    String userSearch = input.getString(); // Input word to be searched
+                    int count = 0;
+                    while ((s = br.readLine()) != null){
+                        words = s.split(" ");
+
+                        for (String word : words){
+                            if (word.equalsIgnoreCase(userSearch)){
+                                count++;
+                                System.out.println("\tThe user " + word + " is present in your contacts");
+                                System.out.println(s);
+
+                            }
+                        }
+                    }
+                    System.out.println(count);
+                    System.out.println("\nGo back to main menu? [y/n]");
+                    if (!input.yesNo()) {
+                        option = 0;
+                    }
                     break;
                 case 4:
                     System.out.println("\nCase 4\n*----------------------------------------------------*");
