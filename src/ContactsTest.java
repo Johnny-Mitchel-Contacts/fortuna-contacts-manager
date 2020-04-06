@@ -13,8 +13,6 @@ public class ContactsTest {
         Input input = new Input();
         int option;
 
-        System.out.println("\nContacts List:\n");
-
         String contactsPathName = "contacts";
         String contactsFileName = "contacts.txt";
 
@@ -40,11 +38,9 @@ public class ContactsTest {
             contactsHash.put(name, phoneNum);
         }
 
-        System.out.println(contactsHash);
-
 
         do {
-            System.out.println("*----------------------------------------------------*");
+            System.out.println("\n*------------------Contacts List---------------------*");
             System.out.printf("|%-26s %25s|","","");
             System.out.printf("\n|\t%-44s %4s|"," What would you like to do?","");
             System.out.printf("\n|%-26s %25s|","","");
@@ -55,30 +51,30 @@ public class ContactsTest {
             System.out.printf("\n|\t%-44s %4s|"," 5 - Exit.","");
             System.out.printf("\n|%-26s %25s|","","");
             System.out.println("\n*----------------------------------------------------*\n");
-            System.out.print(">");
+            System.out.print("");
+            System.out.println(">");
             option = input.getInt();
-            System.out.print("\n\n");
 
 
             switch (option) {
-                case 1:
+                case 1:  // Lists the Contacts
+                    System.out.println("\n*--------------------Case 1--------------------------*");
                     ReadContacts.displayContacts();
-                    System.out.println("\nGo back to main menu? [y/n]");
-                    if (!input.yesNo()) {
-                        option = 0;
-                    }
 
+                    // Back to main
+                    option = BackToMain.navigateToMain();
                     break;
-                case 2:
-                    System.out.println("\nCase 2\n*----------------------------------------------------*");
+
+
+                case 2:  // Adds user input to the list of Contacts
+                    System.out.println("\n*--------------------Case 2--------------------------*");
+
                     System.out.println("Enter the name of your contact: ");
                     String newName = input.getString();
                     System.out.println("Enter " + newName + "'s phone number: ");
                     String newNumber = input.getString();
                     String newContact = newName + " | " + newNumber + " |";
                     contactsHash.put(newName, newNumber);
-
-                    System.out.println(contactsHash);
 
                     contactsHash.values().removeAll(Collections.singleton(null));
                     List<String> addedContacts = new ArrayList<>();
@@ -90,22 +86,18 @@ public class ContactsTest {
                         if (thisContact.getKey() != null &&  thisContact.getValue() != null) {
                              addedContacts.add(thisContact.getKey() + "|" + thisContact.getValue());
                             Files.write(contactsPath,addedContacts);
-                            System.out.println(thisContact.getKey());
-                            System.out.println(thisContact.getValue());
                         }
-
                     }
-                    System.out.println(addedContacts);
                     System.out.println("\nHere are the updated contacts\n");
                     ReadContacts.displayContacts();
-                    System.out.println("\nGo back to main menu? [y/n]");
-                    if (!input.yesNo()) {
-                        option = 0;
-                    }
 
+                    // Back to main
+                    option = BackToMain.navigateToMain();
                     break;
-                case 3:
-                    System.out.println("\nCase 3:\n*----------------------------------------------------*");
+
+
+                case 3:  // Search for an existing contact
+                    System.out.println("\n*--------------------Case 3--------------------------*");
                     System.out.println("Enter name you would like to search for: ");
                     String userSearch = input.getString(); // Input word to be searched
                     if (!contactsHash.containsKey(userSearch)){
@@ -114,19 +106,19 @@ public class ContactsTest {
                         String searchName = userSearch.substring(0,1).toUpperCase() + userSearch.substring(1);
                         System.out.println(searchName + "'s phone number is: " + contactsHash.get(userSearch) );
                     }
-
-                    System.out.println("\nGo back to main menu? [y/n]");
-                    if (!input.yesNo()) {
-                        option = 0;
-                    }
+                    // Back to main
+                    option = BackToMain.navigateToMain();
                     break;
-                case 4:
-                    System.out.println("\nCase 4\n*----------------------------------------------------*");
+
+
+                case 4:  // Delete an existing contact
+                    System.out.println("\n*--------------------Case 4--------------------------*");
                     System.out.println("Who would you like to remove from your contacts?");
                     String userDelete = input.getString();
                     if (!contactsHash.containsKey(userDelete)){
                         System.out.println("User not found");
                     } else {
+                        System.out.println(userDelete + " has been deleted from the list of contacts.");
                         contactsHash.remove(userDelete);
                         List<String> newContactsList = new ArrayList<>();
                         Iterator dhmIterator = contactsHash.entrySet().iterator();
@@ -136,26 +128,23 @@ public class ContactsTest {
                             if (delContact.getKey() != null &&  delContact.getValue() != null) {
                                 newContactsList.add(delContact.getKey() + "|" + delContact.getValue());
                                 Files.write(contactsPath,newContactsList);
-                                System.out.println(delContact.getKey());
-                                System.out.println(delContact.getValue());
                             }
                         }
                         Files.write(contactsPath, newContactsList);
                     }
+                    // Back to main
+                    option = BackToMain.navigateToMain();
                     break;
-                case 5:
+
+
+                case 5:  // Exit from main menu
                     option = 0;
                     break;
                 default:
                     System.out.println("I'm sorry, that wasn't a valid input");
-                    System.out.println("Go back to main menu? [y/n]");
-                    if (!input.yesNo()) {
-                        option = 0;
-                    }
+                    option = BackToMain.navigateToMain();
                     break;
             }
-
-            System.out.println();
         } while (option != 0);
 
         System.out.println("Have a good day!");
