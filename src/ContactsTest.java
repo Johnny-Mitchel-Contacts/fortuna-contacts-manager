@@ -1,15 +1,9 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
-
 import util.Input;
-
 
 
 
@@ -25,7 +19,7 @@ public class ContactsTest {
         String contactsFileName = "contacts.txt";
 
 
-        Path contactsPath = Paths.get(contactsPathName);
+        Path contactsPath = Paths.get(contactsPathName, contactsFileName);
         if (!Files.exists(contactsPath)) {
             Files.createDirectory(contactsPath);
         }
@@ -47,26 +41,6 @@ public class ContactsTest {
         }
 
         System.out.println(contactsHash);
-
-
-
-//        String line = "Name | Number | \n------------------";
-//        Files.write(contactsFilePath, Arrays.asList(line));
-
-        // Break groceries into its own file
-//        Path groceriesPath = Paths.get(contactsPathName, contactsFileName);
-//        List<String> groceries = Arrays.asList("Joe | 123-4567 |", "Randy | 111-1111 |", "Sandy | 222-2222 |");
-//        Files.write(groceriesPath, groceries, StandardOpenOption.APPEND);
-
-        // Append to contacts
-//        line = "Mark | 765-4321 |";
-//        Files.write(groceriesPath, Arrays.asList(line), StandardOpenOption.APPEND);
-
-//        // read the list
-//        List<String> readList = Files.readAllLines(contactsPath);
-//        System.out.println(readList);
-
-
 
 
         do {
@@ -106,23 +80,22 @@ public class ContactsTest {
 
                     System.out.println(contactsHash);
 
-                    List<String> addedContacts = null;
+                    contactsHash.values().removeAll(Collections.singleton(null));
+                    List<String> addedContacts = new ArrayList<>();
 
                     Iterator hmIterator = contactsHash.entrySet().iterator();
 
                     while (hmIterator.hasNext()) {
                         Map.Entry thisContact = (Map.Entry)hmIterator.next();
-                        System.out.println(thisContact.getKey());
-                        System.out.println(thisContact.getValue());
-                        if (thisContact.getKey() != null) {
+                        if (thisContact.getKey() != null &&  thisContact.getValue() != null) {
                              addedContacts.add(thisContact.getKey() + "|" + thisContact.getValue());
+                            Files.write(contactsPath,addedContacts);
+                            System.out.println(thisContact.getKey());
+                            System.out.println(thisContact.getValue());
                         }
+
                     }
-
                     System.out.println(addedContacts);
-
-//                    Files.write(groceriesPath, Arrays.asList(newContact), StandardOpenOption.APPEND);
-
                     System.out.println("\nHere are the updated contacts\n");
                     ReadContacts.displayContacts();
                     System.out.println("\nGo back to main menu? [y/n]");
@@ -134,26 +107,14 @@ public class ContactsTest {
                 case 3:
                     System.out.println("\nCase 3:\n*----------------------------------------------------*");
                     System.out.println("Enter name you would like to search for: ");
-                    File f1 = new File("contacts/contacts.txt");  //Creation of File Descriptor for input file
-                    String[] words = null;  //Intialize the word Array
-                    FileReader fr = new FileReader(f1);  //Creation of File Reader object
-                    BufferedReader br = new BufferedReader(fr); //Creation of BufferedReader object
-                    String s;
                     String userSearch = input.getString(); // Input word to be searched
-                    int count = 0;
-                    while ((s = br.readLine()) != null){
-                        words = s.split(" ");
-
-                        for (String word : words){
-                            if (word.equalsIgnoreCase(userSearch)){
-                                count++;
-                                System.out.println("\tThe user " + word + " is present in your contacts");
-                                System.out.println(s);
-
-                            }
-                        }
+                    if (!contactsHash.containsKey(userSearch)){
+                        System.out.println("User not found");
+                    } else {
+                        String searchName = userSearch.substring(0,1).toUpperCase() + userSearch.substring(1);
+                        System.out.println(searchName + "'s phone number is: " + contactsHash.get(userSearch) );
                     }
-                    System.out.println(count);
+
                     System.out.println("\nGo back to main menu? [y/n]");
                     if (!input.yesNo()) {
                         option = 0;
@@ -161,6 +122,26 @@ public class ContactsTest {
                     break;
                 case 4:
                     System.out.println("\nCase 4\n*----------------------------------------------------*");
+                    System.out.println("Who would you like to remove from your contacts?");
+                    String userDelete = input.getString();
+                    if (!contactsHash.containsKey(userDelete)){
+                        System.out.println("User not found");
+                    } else {
+                        contactsHash.remove(userDelete);
+                        List<String> newContactsList = new ArrayList<>();
+                        Iterator dhmIterator = contactsHash.entrySet().iterator();
+
+                        while(dhmIterator.hasNext()){
+                            Map.Entry delContact = (Map.Entry)dhmIterator.next();
+                            if (delContact.getKey() != null &&  delContact.getValue() != null) {
+                                newContactsList.add(delContact.getKey() + "|" + delContact.getValue());
+                                Files.write(contactsPath,newContactsList);
+                                System.out.println(delContact.getKey());
+                                System.out.println(delContact.getValue());
+                            }
+                        }
+                        Files.write(contactsPath, newContactsList);
+                    }
                     break;
                 case 5:
                     option = 0;
