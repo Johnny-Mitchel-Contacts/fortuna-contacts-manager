@@ -6,9 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+
 import util.Input;
 
 
@@ -34,17 +33,34 @@ public class ContactsTest {
 
         // Create a file
         Path contactsFilePath = Paths.get(contactsPathName, contactsFileName);
-        String line = "Name | Number | \n------------------";
-        Files.write(contactsFilePath, Arrays.asList(line));
+
+        List<String> listOfContacts = Files.readAllLines(contactsFilePath);
+
+
+        HashMap<String, String> contactsHash = new HashMap<>();
+        for (String contact : listOfContacts) {
+            // Seperate name from phone #
+            String[] thisLine = contact.split("\\|");
+            String name = thisLine[0];
+            String phoneNum = thisLine[1];
+            contactsHash.put(name, phoneNum);
+        }
+
+        System.out.println(contactsHash);
+
+
+
+//        String line = "Name | Number | \n------------------";
+//        Files.write(contactsFilePath, Arrays.asList(line));
 
         // Break groceries into its own file
-        Path groceriesPath = Paths.get(contactsPathName, contactsFileName);
-        List<String> groceries = Arrays.asList("Joe | 123-4567 |", "Randy | 111-1111 |", "Sandy | 222-2222 |");
-        Files.write(groceriesPath, groceries, StandardOpenOption.APPEND);
+//        Path groceriesPath = Paths.get(contactsPathName, contactsFileName);
+//        List<String> groceries = Arrays.asList("Joe | 123-4567 |", "Randy | 111-1111 |", "Sandy | 222-2222 |");
+//        Files.write(groceriesPath, groceries, StandardOpenOption.APPEND);
 
         // Append to contacts
-        line = "Mark | 765-4321 |";
-        Files.write(groceriesPath, Arrays.asList(line), StandardOpenOption.APPEND);
+//        line = "Mark | 765-4321 |";
+//        Files.write(groceriesPath, Arrays.asList(line), StandardOpenOption.APPEND);
 
 //        // read the list
 //        List<String> readList = Files.readAllLines(contactsPath);
@@ -86,8 +102,26 @@ public class ContactsTest {
                     System.out.println("Enter " + newName + "'s phone number: ");
                     String newNumber = input.getString();
                     String newContact = newName + " | " + newNumber + " |";
+                    contactsHash.put(newName, newNumber);
 
-                    Files.write(groceriesPath, Arrays.asList(newContact), StandardOpenOption.APPEND);
+                    System.out.println(contactsHash);
+
+                    List<String> addedContacts = null;
+
+                    Iterator hmIterator = contactsHash.entrySet().iterator();
+
+                    while (hmIterator.hasNext()) {
+                        Map.Entry thisContact = (Map.Entry)hmIterator.next();
+                        System.out.println(thisContact.getKey());
+                        System.out.println(thisContact.getValue());
+                        if (thisContact.getKey() != null) {
+                             addedContacts.add(thisContact.getKey() + "|" + thisContact.getValue());
+                        }
+                    }
+
+                    System.out.println(addedContacts);
+
+//                    Files.write(groceriesPath, Arrays.asList(newContact), StandardOpenOption.APPEND);
 
                     System.out.println("\nHere are the updated contacts\n");
                     ReadContacts.displayContacts();

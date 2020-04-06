@@ -19,16 +19,8 @@ public class ReadContacts {
 
         List<String> contactsString = Files.readAllLines(contactsFilePath);
 
-        for( String str :  contactsString) {
+        for( String str : contactsString) {
             System.out.println(str);
         }
     }
-
-
-
-//    public ReadContacts() throws FileNotFoundException {
-//        }
-
-
-
 }
