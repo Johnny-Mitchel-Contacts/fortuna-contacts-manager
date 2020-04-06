@@ -31,10 +31,11 @@ public class Input {
             var = Integer.parseInt(s);
         } catch (Exception e) {
             System.err.println("This is not an Integer");
-            e.printStackTrace();
+            System.err.println("Enter again:");
             return getInt();
         }
         return var;
     }
+
 
 }

@@ -10,6 +10,7 @@ import util.Input;
 
 
 
+
 public class ContactsTest {
     public static void main(String[] args) throws IOException {
 
@@ -30,21 +31,22 @@ public class ContactsTest {
 
         // Create a file
         Path contactsFilePath = Paths.get(contactsPathName, contactsFileName);
-        String line = "Name | Number";
+        String line = "Name | Number | \n------------------";
         Files.write(contactsFilePath, Arrays.asList(line));
 
         // Break groceries into its own file
         Path groceriesPath = Paths.get(contactsPathName, contactsFileName);
-        List<String> groceries = Arrays.asList("Joe | 123-4567", "Randy | 111-1111", "Sandy | 222-2222");
+        List<String> groceries = Arrays.asList("Joe | 123-4567 |", "Randy | 111-1111 |", "Sandy | 222-2222 |");
         Files.write(groceriesPath, groceries, StandardOpenOption.APPEND);
 
         // Append to contacts
-        line = "Mark | 765-4321";
+        line = "Mark | 765-4321 |";
         Files.write(groceriesPath, Arrays.asList(line), StandardOpenOption.APPEND);
 
 //        // read the list
 //        List<String> readList = Files.readAllLines(contactsPath);
 //        System.out.println(readList);
+
 
 
 
@@ -60,13 +62,15 @@ public class ContactsTest {
             System.out.printf("\n|\t%-44s %4s|"," 5 - Exit.","");
             System.out.printf("\n|%-26s %25s|","","");
             System.out.println("\n*----------------------------------------------------*\n");
+            System.out.print(">");
             option = input.getInt();
+            System.out.print("\n\n");
 
 
             switch (option) {
                 case 1:
                     ReadContacts.displayContacts();
-                    System.out.println("Go back to main menu? [y/n]");
+                    System.out.println("\nGo back to main menu? [y/n]");
                     if (!input.yesNo()) {
                         option = 0;
                     }
@@ -78,13 +82,13 @@ public class ContactsTest {
                     String newName = input.getString();
                     System.out.println("Enter " + newName + "'s phone number: ");
                     String newNumber = input.getString();
-                    String newContact = newName + " | " + newNumber;
+                    String newContact = newName + " | " + newNumber + " |";
 
                     Files.write(groceriesPath, Arrays.asList(newContact), StandardOpenOption.APPEND);
 
                     System.out.println("\nHere are the updated contacts\n");
                     ReadContacts.displayContacts();
-                    System.out.println("Go back to main menu? [y/n]");
+                    System.out.println("\nGo back to main menu? [y/n]");
                     if (!input.yesNo()) {
                         option = 0;
                     }
@@ -99,6 +103,13 @@ public class ContactsTest {
                 case 5:
                     option = 0;
                     break;
+                default:
+                    System.out.println("I'm sorry, that wasn't a valid input");
+                    System.out.println("Go back to main menu? [y/n]");
+                    if (!input.yesNo()) {
+                        option = 0;
+                    }
+                    break;
             }
 
             System.out.println();
@@ -107,5 +118,4 @@ public class ContactsTest {
         System.out.println("Have a good day!");
 
     }
-
 }
